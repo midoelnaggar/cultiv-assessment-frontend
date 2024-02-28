@@ -19,10 +19,11 @@ const config: Config = {
         "h1": "2.5rem"
       },
       width: {
-        'input': '29rem',
+        'input': '30rem',
       },
       minHeight: {
-        'box': '43.75rem'
+        'box': '43.75rem',
+        'card': '25rem'
       },
       colors: {
         "foreground-primary-color": "#1f1d0d",

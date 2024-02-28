@@ -1,29 +1,41 @@
-import Button from "@/components/Button/Button";
-import FormControl from "@/components/FormControl/FormControl";
-import Loading from "@/components/Loading";
+import Button from "@/components/ui/Button/Button";
+import FormControl from "@/components/ui/FormControl/FormControl";
 import { ILoginForm } from "@/interfaces/userInterfaces";
 import AuthLayout from "@/layouts/AuthLayout";
 import { AppDispatch, RootState } from "@/store";
 import { loginThunk } from "@/store/thunks/userThunks";
+import { useFormik } from "formik";
 import Link from "next/link";
-import { ChangeEvent, MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import * as Yup from "yup";
 
 export default function SignIn() {
   const { loading } = useSelector((state: RootState) => state.user);
 
-  const [form, setForm] = useState<ILoginForm>({ email: "", password: "" });
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(loginThunk(form));
-  };
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .required("Email is required")
+      .email("Invalid email format"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
+  });
+
+  const formik = useFormik<ILoginForm>({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: schema,
+    onSubmit: async () => {
+      dispatch(loginThunk(values));
+    },
+  });
+
+  const { errors, values, handleChange, handleSubmit } = formik;
 
   return (
     <AuthLayout
@@ -35,6 +47,7 @@ export default function SignIn() {
           Sign up
         </Link>
       }
+      submit={handleSubmit}
     >
       <div className="flex flex-col gap-9 mb-12">
         <FormControl
@@ -44,12 +57,13 @@ export default function SignIn() {
           inputProps={{
             name: "email",
             type: "email",
-            value: form.email,
-            onChange: handleInputChange,
+            value: values.email,
+            onChange: handleChange,
             required: true,
             placeholder: "example@email.com",
             disabled: loading,
           }}
+          error={errors.email}
         />
         <FormControl
           labelProps={{
@@ -58,17 +72,17 @@ export default function SignIn() {
           inputProps={{
             name: "password",
             type: "password",
-            value: form.password,
-            onChange: handleInputChange,
+            value: values.password,
+            onChange: handleChange,
             required: true,
             disabled: loading,
           }}
+          error={errors.password}
         />
       </div>
       <Button
         className="px-28 mb-24"
         type="submit"
-        onClick={handleSubmit}
         disabled={loading}
         loading={loading}
       >

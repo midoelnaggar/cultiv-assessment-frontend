@@ -1,6 +1,8 @@
 import { ILoginForm, IRegisterForm } from "@/interfaces/userInterfaces";
 import userServices from "@/services/userServices";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export const loginThunk = createAsyncThunk(
     "user/sign-in",
@@ -10,6 +12,7 @@ export const loginThunk = createAsyncThunk(
             return res;
 
         } catch (err: any) {
+            toast.error(err?.response?.data?.message?.toUpperCase(), { position: "bottom-left" })
             return rejectWithValue(err);
         }
     })
@@ -22,6 +25,7 @@ export const registerThunk = createAsyncThunk(
             return res;
 
         } catch (err: any) {
+            toast.error(err?.response?.data?.message?.toUpperCase(), { position: "bottom-left" })
             return rejectWithValue(err);
         }
     })

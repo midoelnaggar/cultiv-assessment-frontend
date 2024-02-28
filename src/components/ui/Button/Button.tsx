@@ -1,5 +1,5 @@
 import { ComponentProps } from "react";
-import Loading from "../Loading";
+import Loading from "../../Loading";
 
 type ButtonProps = ComponentProps<"button"> & {
   loading: boolean;
@@ -14,7 +14,7 @@ const Button = ({ children, loading, ...props }: ButtonProps) => {
        hover:bg-background-secondary-color hover:text-foreground-primary-color hover:fill-foreground-primary-color
         transition-all ${props.className || ""}`}
     >
-      {loading ?<Loading className="h-7 w-13 fill-inherit" /> :children}
+      {loading ?<Loading className="h-7 w-15 fill-inherit" /> :children}
     </button>
   );
 };

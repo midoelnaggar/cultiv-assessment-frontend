@@ -1,34 +1,51 @@
-import Button from "@/components/Button/Button";
-import FormControl from "@/components/FormControl/FormControl";
+import Button from "@/components/ui/Button/Button";
+import FormControl from "@/components/ui/FormControl/FormControl";
 import { IRegisterForm } from "@/interfaces/userInterfaces";
 import AuthLayout from "@/layouts/AuthLayout";
 import { AppDispatch, RootState } from "@/store";
-import { loginThunk, registerThunk } from "@/store/thunks/userThunks";
+import { registerThunk } from "@/store/thunks/userThunks";
+import { useFormik } from "formik";
 import Link from "next/link";
-import { ChangeEvent, MouseEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
 
 export default function SignUp() {
   const { loading } = useSelector((state: RootState) => state.user);
 
-  const [form, setForm] = useState<IRegisterForm>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    number: "",
-  });
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    dispatch(registerThunk({ ...form, confirmPassword: undefined }));
-  };
+  const schema = Yup.object().shape({
+    name: Yup.string().required("Name is required").trim(),
+    email: Yup.string()
+      .required("Email is required")
+      .email("Invalid email format"),
+    number: Yup.string()
+      .required("Number is required")
+      .matches(/^\+(?:[0-9] ?){6,14}[0-9]$/, "Phone number is not valid") 
+      .min(10, "Number must be at least 10 characters"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: Yup.string()
+      .required("Confirm password is required")
+      .oneOf([Yup.ref("password")], "Passwords must match"),
+  });
+
+  const formik = useFormik<IRegisterForm>({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      number: "",
+    },
+    validationSchema: schema,
+    onSubmit: async ({ name, email, number, password }) => {
+      dispatch(registerThunk({ name, email, number, password }));
+    },
+  });
+
+  const { errors, values, handleChange, handleSubmit } = formik;
 
   return (
     <AuthLayout
@@ -39,6 +56,7 @@ export default function SignUp() {
           Sign in
         </Link>
       }
+      submit={handleSubmit}
     >
       <div className="flex max-w-5xl flex-wrap gap-9 mb-10">
         <FormControl
@@ -48,12 +66,13 @@ export default function SignUp() {
           inputProps={{
             name: "name",
             type: "text",
-            value: form.name,
-            onChange: handleInputChange,
+            value: values.name,
+            onChange: handleChange,
             required: true,
             placeholder: "John Doe",
             disabled: loading,
           }}
+          error={errors.name}
         />
         <FormControl
           labelProps={{
@@ -62,11 +81,12 @@ export default function SignUp() {
           inputProps={{
             name: "password",
             type: "password",
-            value: form.password,
-            onChange: handleInputChange,
+            value: values.password,
+            onChange: handleChange,
             required: true,
             disabled: loading,
           }}
+          error={errors.password}
         />
         <FormControl
           labelProps={{
@@ -75,12 +95,13 @@ export default function SignUp() {
           inputProps={{
             name: "email",
             type: "email",
-            value: form.email,
-            onChange: handleInputChange,
+            value: values.email,
+            onChange: handleChange,
             required: true,
             placeholder: "example@email.com",
             disabled: loading,
           }}
+          error={errors.email}
         />
         <FormControl
           labelProps={{
@@ -89,11 +110,12 @@ export default function SignUp() {
           inputProps={{
             name: "confirmPassword",
             type: "password",
-            value: form.confirmPassword,
-            onChange: handleInputChange,
+            value: values.confirmPassword,
+            onChange: handleChange,
             required: true,
             disabled: loading,
           }}
+          error={errors.confirmPassword}
         />
         <FormControl
           labelProps={{
@@ -102,27 +124,27 @@ export default function SignUp() {
           inputProps={{
             name: "number",
             type: "tel",
-            value: form.number,
-            onChange: handleInputChange,
+            value: values.number,
+            onChange: handleChange,
             required: true,
             placeholder: "+1(123)456-789",
             disabled: loading,
           }}
+          error={errors.number}
         />
       </div>
       <Button
         className="px-5 mb-6"
         type="submit"
-        onClick={handleSubmit}
         disabled={loading}
         loading={loading}
       >
         Sign Me Up
       </Button>
-      <text className="mb-10 text-sm text-neutral-500 *:text-inherit *:font-normal">
+      <p className="mb-10 text-sm text-neutral-500 *:text-inherit *:font-normal">
         By contiuing you accept our <Link href="">terms and conditions</Link>{" "}
         and our <Link href="">privacy policy</Link>.
-      </text>
+      </p>
     </AuthLayout>
   );
 }

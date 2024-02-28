@@ -1,6 +1,7 @@
 import { IUserState } from "@/interfaces/userInterfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import { loginThunk, registerThunk } from "../thunks/userThunks";
+import { toast } from "react-toastify";
 
 
 const initialState: IUserState = {

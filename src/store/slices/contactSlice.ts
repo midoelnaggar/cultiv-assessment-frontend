@@ -17,7 +17,12 @@ const initialState: IContactState = {
 const contactSlice = createSlice({
     name: "contact",
     initialState,
-    reducers: {},
+    reducers: {
+        resetContacts: (state) => {
+            state = initialState;
+            return state;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(createContactThunk.pending, (state) => {
             state.loading = true;

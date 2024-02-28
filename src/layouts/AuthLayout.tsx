@@ -9,6 +9,7 @@ interface IProps {
   subtitle?: string;
   footerText: string;
   footerLink: ReactNode;
+  submit: () => void | Promise<void>;
 }
 
 const AuthLayout = ({
@@ -17,6 +18,7 @@ const AuthLayout = ({
   subtitle,
   footerText,
   footerLink,
+  submit,
 }: IProps) => {
   const { token } = useSelector((state: RootState) => state.user);
 
@@ -30,8 +32,17 @@ const AuthLayout = ({
 
   return token ? null : (
     <div className="min-h-screen w-full flex flex-col justify-center items-center">
-      <form className="flex flex-col min-h-box items-center p-9 bg-box-background-color">
-        <h1 className={`mb-6 ${router.pathname == "/sign-in" ? "mt-auto" :"mb-auto"} `}>{title}</h1>
+      <form
+        onSubmit={submit}
+        className="flex flex-col min-h-box items-center p-9 bg-box-background-color"
+      >
+        <h1
+          className={`mb-6 ${
+            router.pathname == "/sign-in" ? "mt-auto" : "mb-auto"
+          } `}
+        >
+          {title}
+        </h1>
         {subtitle && <p className="mb-12">{subtitle}</p>}
         {children}
         <div className="flex">

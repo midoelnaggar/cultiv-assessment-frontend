@@ -1,5 +1,5 @@
 import { ComponentProps, useState } from "react";
-import ShowPasswordIcon from "../ui/icons/ShowPasswordIcon";
+import ShowPasswordIcon from "../icons/ShowPasswordIcon";
 
 type DivProps = ComponentProps<"div">;
 type LabelProps = ComponentProps<"label">;
@@ -9,9 +9,15 @@ interface IProps {
   containerProps?: DivProps;
   inputProps?: InputProps;
   labelProps?: LabelProps;
+  error?: string;
 }
 
-const FormControl = ({ inputProps, labelProps, containerProps }: IProps) => {
+const FormControl = ({
+  inputProps,
+  labelProps,
+  containerProps,
+  error,
+}: IProps) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
@@ -31,11 +37,15 @@ const FormControl = ({ inputProps, labelProps, containerProps }: IProps) => {
               : "password"
             : inputProps?.type
         }
-        className={`h-11 rounded-md	px-4 text-xl border-neutral-300 border-solid border-2 placeholder:italic ${inputProps?.type == "password" ? "pe-10" : ""}`}
+        className={`h-11 rounded-md	px-4 text-xl border-neutral-300 border-solid border-2 placeholder:italic ${
+          inputProps?.type == "password" ? "pe-10" : ""
+        }
+        ${error ? "border-red-600 outline-red-800" : ""}
+        `}
       />
       {inputProps?.type == "password" && (
         <button
-        className="absolute bottom-3 right-3"
+          className="absolute bottom-3 right-3"
           onClick={(e) => {
             e.preventDefault();
             setShowPassword(!showPassword);
@@ -43,6 +53,11 @@ const FormControl = ({ inputProps, labelProps, containerProps }: IProps) => {
         >
           <ShowPasswordIcon />
         </button>
+      )}
+      {error && (
+        <span className="absolute top-full left-0 mt-1 text-red-600">
+          {error}
+        </span>
       )}
     </div>
   );

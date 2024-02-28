@@ -5,14 +5,15 @@ export interface IContact {
     created_at: Date;
     updated_at?: Date | null;
     imageUrl?: string | null;
+    email?: string | null;
 }
 
 export interface IContactForm {
     id?: string;
     name: string;
     number: string;
-    email: string;
-    image: File;
+    email?: string |null;
+    image?: File;
 }
 
 export interface IContactState {
