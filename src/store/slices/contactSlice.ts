@@ -4,7 +4,7 @@ import {
     createContactThunk,
     updateContactThunk,
     deleteContactThunk,
-    getAllContactThunk,
+    getAllContactsThunk,
     getContactThunk
 } from "../thunks/contactThunks";
 
@@ -103,16 +103,16 @@ const contactSlice = createSlice({
         });
 
 
-        builder.addCase(getAllContactThunk.pending, (state) => {
+        builder.addCase(getAllContactsThunk.pending, (state) => {
             state.loading = true;
         });
-        builder.addCase(getAllContactThunk.fulfilled, (state, action) => {
+        builder.addCase(getAllContactsThunk.fulfilled, (state, action) => {
             if (action.payload.status === 200 && Array.isArray(action.payload.data?.data)) {
                 state.contacts = action.payload.data.data;
             }
             state.loading = false;
         });
-        builder.addCase(getAllContactThunk.rejected, (state) => {
+        builder.addCase(getAllContactsThunk.rejected, (state) => {
             state.loading = false;
         });
     },

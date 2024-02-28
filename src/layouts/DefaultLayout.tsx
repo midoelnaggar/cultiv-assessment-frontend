@@ -1,6 +1,6 @@
 import LoadingOverlay from "@/components/LoadingOverlay/LoadingOverlay";
 import { AppDispatch, RootState } from "@/store";
-import { getAllContactThunk } from "@/store/thunks/contactThunks";
+import { getAllContactsThunk } from "@/store/thunks/contactThunks";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { PropsWithChildren, useEffect } from "react";
@@ -16,7 +16,7 @@ const DefaultLayout = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers["Authorization"] = `Bearer ${token}`;
-      dispatch(getAllContactThunk());
+      dispatch(getAllContactsThunk());
     } else {
       router.replace("/sign-in");
     }
