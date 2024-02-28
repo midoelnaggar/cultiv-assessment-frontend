@@ -1,40 +1,39 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Frontend with TypeScript and Tailwind CSS
+
+This is a frontend project built with Next.js, TypeScript, and Tailwind CSS. It provides a user interface to interact with the backend API for user authentication and contact management.
+
+## Features
+
+- Next.js for server-side rendering and client-side routing
+- TypeScript for type safety
+- Tailwind CSS for styling
 
 ## Getting Started
 
-First, run the development server:
+Before running the frontend project, make sure you have the backend project running.
 
-```bash
+1. First, run the backend project following the instructions provided in its README.
+
+2. Create a `.env.local` file in the root directory of the frontend project with the following variable:
+
+NEXT_PUBLIC_API_URL=backend_api_url
+
+You can use the data provided in the `.env.example` file and replace `backend_api_url` with the URL of your backend API.
+
+3. Install dependencies:
+
+npm install
+
+4. Run the project:
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Now the frontend server is up and running and ready to be integrated with the backend.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Integration with Backend
+Ensure that the backend API URL is correctly set in the .env.local file. The frontend project will make requests to this URL to communicate with the backend for user authentication and contact management.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Contributing
+Contributions are welcome! Feel free to open issues or pull requests.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+License
+This project is licensed under the MIT License.
